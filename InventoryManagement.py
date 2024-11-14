@@ -5,7 +5,7 @@ import time
 inventory = {}
 data = {}
 cart = {}
-name = input("Enter Your Name: ")
+name = input("Enter Your Name: ").lower()
 password = input("Enter password: ")
 file_dir = Path("userData")
 file_dir.mkdir(exist_ok=True)
@@ -19,7 +19,7 @@ if file_path.exists():
             exit()
 else:
     with open(file_path, 'w') as f:
-        inventory[name.lower()] = password
+        inventory[name] = password
         json.dump(inventory, f, indent=4)
 
 if file_path_data.exists():
@@ -49,15 +49,13 @@ def add():
         count += 1
 
 def viewInventory():
-    if len(inventory) == 0:
+    if len(inventory) <=1:
         print("Inventory Empty!")
         add()
         return
     count = 1
     for item, details in inventory.items():
-        # print(name)
         if item == name:
-            print("running")
             continue
         print(f"Item {count}: {item}\t|\tAmount: {details['amount']}\t|\tPrice(in inr): {details['price']}")
         count += 1
@@ -80,14 +78,14 @@ def sell_items():
                 if amt > inventory[item]['amount']:
                     print("Amount exceeds availability.")
                     continue
-
                 if item in cart:
                     cart[item]['amount'] += amt
                 else:
                     cart[item] = {'amount': amt, 'price': inventory[item]['price']}
+                print(amt)
+                print(inventory[item]['amount'])
                 inventory[item]['amount'] -= amt
                 print(f"Added {amt} of {item} to the cart.")
-
                 checkout_decision = input("Do you want to checkout? (yes/no): ").strip().lower()
                 if checkout_decision in ["yes", "y"]:
                     checkout()
@@ -129,7 +127,6 @@ def checkout():
             print("Invalid amount entered. Please enter a numeric value.")
 
     for item, details in cart.items():
-        inventory[item]['amount'] -= details['amount']
         if item in data:
             data[item]['amount'] += details['amount']
         else:
