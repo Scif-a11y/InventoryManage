@@ -106,7 +106,7 @@ def view_cart():
         print(f"{item}: {details['amount']} @ {details['price']} INR each")
         total_cost += details['amount'] * details['price']
     print(f"Total Cost: {total_cost} INR")
-
+print("prateek")
 def checkout():
     if not cart:
         print("Cart is empty. Please add items to the cart before checking out.")
@@ -125,7 +125,6 @@ def checkout():
                 break
         except ValueError:
             print("Invalid amount entered. Please enter a numeric value.")
-
     for item, details in cart.items():
         if item in data:
             data[item]['amount'] += details['amount']
